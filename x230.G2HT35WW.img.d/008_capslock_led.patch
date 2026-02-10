@@ -1,0 +1,27 @@
+Enable Caps Lock LED for X220 7-row classic keyboard on X230.
+
+The X220 keyboard has an LED in the Caps Lock key driven by keyboard
+connector pin 21. On the X230 motherboard, this pin is routed to EC
+ball D2 (GPIO163 / VCI_IN0#). The X220 keyboard has no backlight, so
+the backlight detect function of this pin is unused.
+
+This patch hooks the PS/2 SET LED (0xED) data byte handler via its
+jump table entry at 0x6654. When the host sends the LED state byte,
+the trampoline checks bit 2 (Caps Lock) and configures GPIO163 as a
+push-pull output driven LOW (LED ON, active-low) or HIGH (LED OFF),
+then continues to the original handler.
+
+GPIO163 shares its pin with VCI_IN0# (VBAT wake input), but on the X230
+this pin is used for keyboard backlight detection, which is unused with
+the X220 keyboard (no backlight). Switching from VCI_IN0# to GPIO mode
+has no practical side effect.
+
+Trampoline code is placed in free space at 0x23C60.
+
+@@ capslock_led @@
+-00006650  20 20 c0 01 fc 66 00 00  98 67 00 00 98 67 00 00  |  ...f...g...g..|
++00006650  20 20 c0 01 60 3c 02 00  98 67 00 00 98 67 00 00  |  ..`<...g...g..|
+-00023c60  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
++00023c60  0a 20 80 0f f0 00 cc c5  8a 21 09 00 51 26 80 90  |. .......!..Q&..|
+-00023c70  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
++00023c70  cf 21 21 04 00 18 60 00  20 20 80 0f 00 00 fc 66  |.!!...`.  .....f|

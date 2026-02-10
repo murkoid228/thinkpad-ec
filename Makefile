@@ -137,6 +137,9 @@ PATCHES-$(CONFIG_KEYBOARD) += \
 PATCHES-$(CONFIG_BATTERY) += \
     006_battery_validate.patch
 
+PATCHES-$(CONFIG_CAPSLOCK_LED) += \
+    008_capslock_led.patch
+
 # To enable other misc patches:
 # - add a new CONFIG_something value to the defconfig and .config
 # - add a new PATCHES-$(CONFIG_something) line referencing the patch
@@ -171,6 +174,14 @@ patch_enable_keyboard:
 .PHONY: patch_disable_keyboard
 patch_disable_keyboard:
 	$(call config_set,CONFIG_KEYBOARD,n)
+
+.PHONY: patch_enable_capslock_led
+patch_enable_capslock_led:
+	$(call config_set,CONFIG_CAPSLOCK_LED,y)
+
+.PHONY: patch_disable_capslock_led
+patch_disable_capslock_led:
+	$(call config_set,CONFIG_CAPSLOCK_LED,n)
 
 
 # TODO - the scripts/describe output depends on Descriptions.txt -

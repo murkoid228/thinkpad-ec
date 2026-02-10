@@ -36,9 +36,9 @@ With the patches included here, you can install the classic keyboard
 hardware on many xx30 series laptops and make almost every key work properly.
 The only keys that are not working are Fn+F3 (Battery) and Fn+F12 (Hibernate).
 
-The xx30 keyboards do not have a Caps Lock Indicator and the motherboard has
-no hardware support for a Caps Lock Indicator, so the replacement classic
-keyboard will never turn on the Indicator on any laptop.
+On the x230, the classic keyboard's Caps Lock LED can be enabled with the
+`CONFIG_CAPSLOCK_LED` option (disabled by default).  See the
+[CONFIG doc](docs/CONFIG.md) for details.
 
 * A full writeup of the hardware modifications needed can be found at:
     http://www.thinkwiki.org/wiki/Install_Classic_Keyboard_on_xx30_Series_ThinkPads
