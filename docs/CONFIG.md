@@ -32,12 +32,12 @@ have all found that the battery itself was broken.
 
 ### CAPSLOCK_LED patchset
 
-Applying this patch enables the Caps Lock LED on the classic X220 keyboard
-when installed in an X230.  The X220 keyboard has an LED in the Caps Lock
+Applying this patch enables the Caps Lock LED on the classic xx20 keyboard
+when installed in an xx30.  The xx20 keyboard has an LED in the Caps Lock
 key driven by keyboard connector pin 21, which is routed to EC GPIO163 on
-the X230 motherboard.  This patch configures GPIO163 to drive the LED based
-on the Caps Lock state.  It is disabled by default and only useful for x230
-with an X220 classic keyboard installed.
+the xx30 motherboard.  This patch configures GPIO163 to drive the LED based
+on the Caps Lock state.  It is disabled by default and only useful for laptops
+with an xx20 classic keyboard installed.
 
 Configuring which patches are used
 ----------------------------------
