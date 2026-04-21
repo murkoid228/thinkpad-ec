@@ -1,0 +1,27 @@
+Enable Caps Lock LED for xx20 7-row classic keyboard on W530.
+
+The xx20 keyboard has an LED in the Caps Lock key driven by keyboard
+connector pin 21. On the W530 motherboard, this pin is routed to EC
+ball D2 (GPIO163 / VCI_IN0#). The xx20 keyboard has no backlight, so
+the backlight detect function of this pin is unused.
+
+This patch hooks the PS/2 SET LED (0xED) data byte handler via its
+jump table entry at 0x6864. When the host sends the LED state byte,
+the trampoline checks bit 2 (Caps Lock) and configures GPIO163 as a
+push-pull output driven LOW (LED ON, active-low) or HIGH (LED OFF),
+then continues to the original handler.
+
+GPIO163 shares its pin with VCI_IN0# (VBAT wake input), but on the W530
+this pin is used for keyboard backlight detection, which is unused with
+the xx20 keyboard (no backlight). Switching from VCI_IN0# to GPIO mode
+has no practical side effect.
+
+Trampoline code is placed in free space at 0x25260.
+
+@@ capslock_led @@
+-00006860  20 20 c0 01 0c 69 00 00  a8 69 00 00 a8 69 00 00  |  ...i...i...i..|
++00006860  20 20 c0 01 60 52 02 00  a8 69 00 00 a8 69 00 00  |  ..`R...i...i..|
+-00025260  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
++00025260  0a 20 80 0f f0 00 cc c5  8a 21 09 00 51 26 80 90  |. .......!..Q&..|
+-00025270  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
++00025270  cf 21 21 04 00 18 60 00  20 20 80 0f 00 00 0c 69  |.!!...`.  .....i|
